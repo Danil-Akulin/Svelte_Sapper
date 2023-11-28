@@ -6,26 +6,25 @@ import session from 'express-session';
 import sessionFileStore from 'session-file-store';
 
 const FileStore = sessionFileStore(session);
-
 const { json } = require('body-parser');
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
 
-polka() // You can also use Express
+polka()
 	.use(
 		compression({ threshold: 0 }),
 		json(),
 		sirv('static', { dev }),
 		session({
-			secret: 'bleh',
+			secret: 'webpage',
 			resave: false,
-			saveUnitialized: true,
+			saveUninitialized: true,
 			cookie: {
 				maxAge: 31536000
 			},
 			store: new FileStore({
 				path: `.sessions`
-			}),
+			})
 		}),
 		sapper.middleware({
 			session: req => ({
